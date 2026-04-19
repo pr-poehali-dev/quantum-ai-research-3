@@ -41,8 +41,8 @@ const Index = () => {
       </div>
 
       {/* Divider hero → info */}
-      <div className="relative h-16 pointer-events-none overflow-hidden" style={{ marginTop: -1 }}>
-        <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent, ${BG})` }} />
+      <div className="relative h-20 pointer-events-none overflow-hidden -mt-4" style={{ backdropFilter: "blur(0px)" }}>
+        <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 0%, rgba(20,12,6,0.6) 50%, ${BG} 100%)`, backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} />
       </div>
 
       {/* Server info */}
@@ -99,8 +99,8 @@ const Index = () => {
       </div>
 
       {/* Divider info → shop */}
-      <div className="relative h-16 pointer-events-none" style={{ marginTop: -1 }}>
-        <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, ${BG}, ${BG})` }} />
+      <div className="relative h-20 pointer-events-none overflow-hidden -mt-4">
+        <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 0%, rgba(20,12,6,0.6) 50%, ${BG} 100%)`, backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} />
       </div>
 
       {/* Donate shop */}
@@ -109,8 +109,8 @@ const Index = () => {
       </div>
 
       {/* Divider shop → footer */}
-      <div className="relative h-16 pointer-events-none">
-        <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, ${BG}, hsl(25 25% 10%))` }} />
+      <div className="relative h-20 pointer-events-none overflow-hidden -mt-4">
+        <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, transparent 0%, rgba(20,12,6,0.6) 50%, hsl(25 25% 10%) 100%)`, backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)" }} />
       </div>
 
       <Footer />
