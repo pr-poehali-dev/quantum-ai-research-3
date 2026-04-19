@@ -5,8 +5,8 @@ export default function HeroTextOverlay() {
         className="text-6xl md:text-7xl lg:text-8xl font-bold tracking-wider mb-3.5 opacity-100"
         style={{
           fontFamily: "var(--font-montserrat)",
-          color: "rgb(0, 0, 0)",
-          WebkitTextStroke: "5px white",
+          color: "rgb(20, 10, 0)",
+          WebkitTextStroke: "5px #ffb830",
           paintOrder: "stroke fill",
         }}
       >
