@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import Icon from "@/components/ui/icon"
 
 interface DonateItem {
@@ -66,9 +66,22 @@ interface CartItem {
   qty: number
 }
 
+const MOUNTAIN_BG = "https://cdn.poehali.dev/projects/4d77f338-ff1f-46fe-afbb-d7f43bb123d9/files/6c48ff1a-2856-458e-9d2b-7254a9885759.jpg"
+
 export default function DonateShop() {
   const [cart, setCart] = useState<CartItem[]>([])
-  const [cartOpen, setCartOpen] = useState(false)
+  const [showFloatingCart, setShowFloatingCart] = useState(false)
+  const shopRef = useRef<HTMLElement>(null)
+  const cartRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowFloatingCart(entry.isIntersecting),
+      { threshold: 0.1 }
+    )
+    if (shopRef.current) observer.observe(shopRef.current)
+    return () => observer.disconnect()
+  }, [])
 
   const addToCart = (item: DonateItem) => {
     setCart(prev => {
@@ -82,54 +95,129 @@ export default function DonateShop() {
     setCart(prev => prev.filter(c => c.item.id !== id))
   }
 
+  const scrollToCart = () => {
+    cartRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
+
   const totalItems = cart.reduce((s, c) => s + c.qty, 0)
   const totalPrice = cart.reduce((s, c) => s + c.item.price * c.qty, 0)
 
   return (
-    <section className="mx-4 md:mx-0 mb-8">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-foreground text-3xl md:text-4xl font-bold" style={{ fontFamily: "var(--font-montserrat)" }}>
-            Донат-магазин
-          </h2>
-          <p className="text-muted-foreground font-mono text-sm mt-1">Выбери привилегии и поддержи сервер</p>
-        </div>
+    <>
+      {/* Floating cart button */}
+      <div
+        className="fixed bottom-8 right-8 z-50 transition-all duration-300"
+        style={{
+          opacity: showFloatingCart ? 1 : 0,
+          transform: showFloatingCart ? "scale(1) translateY(0)" : "scale(0.8) translateY(20px)",
+          pointerEvents: showFloatingCart ? "auto" : "none",
+        }}
+      >
         <button
-          onClick={() => setCartOpen(o => !o)}
-          className="relative flex items-center gap-2 bg-primary text-primary-foreground px-5 py-3 rounded-full font-semibold font-mono hover:scale-105 transition-all duration-200 hover:shadow-[0_0_20px_hsl(var(--primary)/0.5)]"
+          onClick={scrollToCart}
+          className="relative flex items-center gap-2 bg-primary text-primary-foreground px-5 py-3 rounded-full font-semibold font-mono shadow-lg hover:scale-105 transition-all duration-200 hover:shadow-[0_0_24px_hsl(var(--primary)/0.6)]"
         >
-          <Icon name="ShoppingCart" size={18} />
-          Корзина
+          <Icon name="ShoppingCart" size={20} />
+          <span className="hidden sm:inline">Корзина</span>
           {totalItems > 0 && (
-            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+            <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center animate-bounce">
               {totalItems}
             </span>
           )}
         </button>
       </div>
 
-      {/* Cart */}
-      {cartOpen && (
-        <div className="mb-6 bg-card border border-border rounded-2xl p-6">
-          <h3 className="text-foreground font-bold font-mono text-lg mb-4 flex items-center gap-2">
-            <Icon name="ShoppingCart" size={18} /> Ваша корзина
+      {/* Shop section */}
+      <section ref={shopRef} className="mx-4 md:mx-0 mb-0">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-foreground text-3xl md:text-4xl font-bold" style={{ fontFamily: "var(--font-montserrat)" }}>
+              Донат-магазин
+            </h2>
+            <p className="text-muted-foreground font-mono text-sm mt-1">Выбери привилегии и поддержи сервер</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {ITEMS.map(item => (
+            <div
+              key={item.id}
+              className="bg-card border border-border rounded-2xl p-5 flex flex-col gap-4 hover:border-primary/50 transition-all duration-200"
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-4xl">{item.emoji}</span>
+                <div>
+                  <h3 className="font-bold font-mono text-xl" style={{ color: item.color }}>{item.name}</h3>
+                  <p className="text-foreground font-mono text-lg font-semibold">{item.price} ₽</p>
+                </div>
+              </div>
+
+              <ul className="space-y-1 flex-1">
+                {item.perks.map(perk => (
+                  <li key={perk} className="flex items-start gap-2 text-sm font-mono text-muted-foreground">
+                    <span style={{ color: item.color }} className="mt-0.5">✦</span>
+                    {perk}
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                onClick={() => addToCart(item)}
+                className="w-full py-2.5 rounded-xl font-semibold font-mono text-sm transition-all duration-200 hover:scale-105 flex items-center justify-center gap-2"
+                style={{ background: item.color, color: "#111" }}
+              >
+                <Icon name="Plus" size={16} />
+                В корзину
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Cart section with mountain background */}
+      <div ref={cartRef} className="relative mt-8 mx-4 md:mx-0 rounded-3xl overflow-hidden mb-8">
+        {/* BG */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${MOUNTAIN_BG})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            filter: "blur(3px) brightness(0.4)",
+            transform: "scale(1.05)",
+          }}
+        />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to bottom, rgba(20,10,5,0.5) 0%, rgba(20,10,5,0.85) 100%)" }} />
+
+        {/* Content */}
+        <div className="relative z-10 p-6 md:p-10">
+          <h3 className="text-foreground font-bold font-mono text-2xl mb-6 flex items-center gap-3">
+            <Icon name="ShoppingCart" size={22} />
+            Ваша корзина
           </h3>
+
           {cart.length === 0 ? (
-            <p className="text-muted-foreground font-mono text-sm">Корзина пуста — добавьте привилегии ниже</p>
+            <div className="text-center py-12">
+              <p className="text-4xl mb-3">🛒</p>
+              <p className="text-muted-foreground font-mono text-sm">Корзина пуста — добавьте привилегии выше</p>
+            </div>
           ) : (
             <>
-              <div className="space-y-3 mb-4">
+              <div className="space-y-3 mb-6">
                 {cart.map(({ item, qty }) => (
-                  <div key={item.id} className="flex items-center justify-between border-b border-border pb-3">
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between rounded-xl px-4 py-3 border border-white/10"
+                    style={{ background: "rgba(255,255,255,0.06)" }}
+                  >
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{item.emoji}</span>
                       <div>
-                        <p className="text-foreground font-mono font-semibold">{item.name}</p>
+                        <p className="font-mono font-semibold" style={{ color: item.color }}>{item.name}</p>
                         <p className="text-muted-foreground font-mono text-xs">× {qty} шт.</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-4">
                       <span className="text-foreground font-mono font-bold">{item.price * qty} ₽</span>
                       <button
                         onClick={() => removeFromCart(item.id)}
@@ -141,53 +229,20 @@ export default function DonateShop() {
                   </div>
                 ))}
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-foreground font-mono font-bold text-lg">Итого: {totalPrice} ₽</span>
-                <button className="bg-primary text-primary-foreground px-6 py-3 rounded-full font-semibold font-mono hover:scale-105 transition-all duration-200 hover:shadow-[0_0_20px_hsl(var(--primary)/0.5)] flex items-center gap-2">
-                  Оплатить <Icon name="ArrowUpRight" size={16} />
+
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10 pt-6">
+                <div>
+                  <p className="text-muted-foreground font-mono text-sm">Итого к оплате</p>
+                  <p className="text-foreground font-mono font-bold text-3xl">{totalPrice} ₽</p>
+                </div>
+                <button className="bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold font-mono text-lg hover:scale-105 transition-all duration-200 hover:shadow-[0_0_28px_hsl(var(--primary)/0.6)] flex items-center gap-2 w-full sm:w-auto justify-center">
+                  Оплатить <Icon name="ArrowUpRight" size={20} />
                 </button>
               </div>
             </>
           )}
         </div>
-      )}
-
-      {/* Items grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {ITEMS.map(item => (
-          <div
-            key={item.id}
-            className="bg-card border border-border rounded-2xl p-5 flex flex-col gap-4 hover:border-primary/50 transition-all duration-200"
-            style={{ boxShadow: `0 0 0 0 ${item.color}` }}
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-4xl">{item.emoji}</span>
-              <div>
-                <h3 className="text-foreground font-bold font-mono text-xl" style={{ color: item.color }}>{item.name}</h3>
-                <p className="text-foreground font-mono text-lg font-semibold">{item.price} ₽</p>
-              </div>
-            </div>
-
-            <ul className="space-y-1 flex-1">
-              {item.perks.map(perk => (
-                <li key={perk} className="flex items-start gap-2 text-sm font-mono text-muted-foreground">
-                  <span style={{ color: item.color }} className="mt-0.5">✦</span>
-                  {perk}
-                </li>
-              ))}
-            </ul>
-
-            <button
-              onClick={() => addToCart(item)}
-              className="w-full py-2.5 rounded-xl font-semibold font-mono text-sm transition-all duration-200 hover:scale-105 flex items-center justify-center gap-2"
-              style={{ background: item.color, color: "#111" }}
-            >
-              <Icon name="Plus" size={16} />
-              В корзину
-            </button>
-          </div>
-        ))}
       </div>
-    </section>
+    </>
   )
 }
