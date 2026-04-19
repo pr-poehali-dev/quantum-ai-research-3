@@ -5,7 +5,12 @@ export default function RotatingTextAccent() {
     <div className="absolute bottom-20 right-8 w-28 h-28 md:w-36 md:h-36">
       <div className="relative w-full h-full">
         <div className="absolute inset-0 flex items-center justify-center">
-          <img src={`${CDN_BASE}/circular-logo.svg`} alt="Logo" className="w-12 h-12 md:w-16 md:h-16" />
+          <img
+            src="https://cdn.poehali.dev/projects/4d77f338-ff1f-46fe-afbb-d7f43bb123d9/files/ec7d939e-b914-4e8d-ad92-04150023243a.jpg"
+            alt="Sun"
+            className="w-12 h-12 md:w-16 md:h-16 rounded-full"
+            style={{ imageRendering: "pixelated" }}
+          />
         </div>
 
         <div className="absolute inset-0 animate-spin-slow">
