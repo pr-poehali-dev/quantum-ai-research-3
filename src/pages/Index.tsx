@@ -33,14 +33,7 @@ const Index = () => {
           <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(20,10,5,0.7) 0%, rgba(10,5,20,0.4) 100%)" }} />
 
           {/* Content */}
-          <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 px-8 md:px-16 py-12">
-
-            {/* Blazes */}
-            <div className="flex items-center gap-4 md:gap-8 shrink-0">
-              <img src="https://minecraft.wiki/images/Blaze.png" alt="Ифрит" className="w-32 h-32 md:w-44 md:h-44 object-contain drop-shadow-lg" style={{ imageRendering: "pixelated" }} />
-              <img src="https://minecraft.wiki/images/Blaze_JE3_BE2.png" alt="Ифрит" className="w-32 h-32 md:w-44 md:h-44 object-contain drop-shadow-lg" style={{ imageRendering: "pixelated" }} />
-              <img src="https://minecraft.wiki/images/Blaze.png" alt="Ифрит" className="w-32 h-32 md:w-44 md:h-44 object-contain drop-shadow-lg opacity-70" style={{ imageRendering: "pixelated", transform: "scaleX(-1)" }} />
-            </div>
+          <div className="relative z-10 flex flex-col items-start gap-8 px-8 md:px-16 py-12">
 
             {/* Info */}
             <div className="flex flex-col gap-5">
