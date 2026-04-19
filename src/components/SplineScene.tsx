@@ -40,7 +40,7 @@ export default function SplineScene() {
       {!hasError && (
         <Suspense fallback={null}>
           <Spline
-            scene="https://prod.spline.design/l8gr6AhxxCqDIdBx/scene.splinecode"
+            scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode"
             onLoad={handleLoad}
             onError={handleError}
             style={{

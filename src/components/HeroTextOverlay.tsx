@@ -10,12 +10,12 @@ export default function HeroTextOverlay() {
           paintOrder: "stroke fill",
         }}
       >
-        МАКС
+        SUNCRAFT
       </h1>
       <p className="text-foreground font-mono text-sm md:text-base max-w-xs tracking-widest lg:text-base">
-        Ваш надежный гид
+        Майнкрафт сервер
         <br />
-        в мире баз данных
+        версия 1.19.3
       </p>
     </div>
   )
