@@ -3,6 +3,7 @@ import Header from "@/components/Header"
 import RotatingTextAccent from "@/components/RotatingTextAccent"
 import Footer from "@/components/Footer"
 import HeroTextOverlay from "@/components/HeroTextOverlay"
+import DonateShop from "@/components/DonateShop"
 
 const Index = () => {
   return (
@@ -87,6 +88,11 @@ const Index = () => {
           </div>
         </section>
       </div>
+
+      <div className="max-w-[1200px] mx-auto px-4 md:px-0 mt-12">
+        <DonateShop />
+      </div>
+
       <Footer />
     </div>
   )
