@@ -70,9 +70,22 @@ const MOUNTAIN_BG = "https://cdn.poehali.dev/projects/4d77f338-ff1f-46fe-afbb-d7
 
 export default function DonateShop() {
   const [cart, setCart] = useState<CartItem[]>([])
+  const [nickname, setNickname] = useState("")
   const [showFloatingCart, setShowFloatingCart] = useState(false)
   const shopRef = useRef<HTMLElement>(null)
   const cartRef = useRef<HTMLDivElement>(null)
+
+  const DA_URL = "https://www.donationalerts.com/r/Dima4060"
+
+  const handlePay = () => {
+    if (cart.length === 0) return
+    const itemsText = cart.map(c => `${c.item.emoji} ${c.item.name}${c.qty > 1 ? ` x${c.qty}` : ""}`).join(", ")
+    const comment = nickname.trim()
+      ? `Ник: ${nickname.trim()} | ${itemsText}`
+      : itemsText
+    const url = `${DA_URL}?amount=${totalPrice}&comment=${encodeURIComponent(comment)}`
+    window.open(url, "_blank")
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -230,14 +243,29 @@ export default function DonateShop() {
                 ))}
               </div>
 
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10 pt-6">
+              <div className="border-t border-white/10 pt-6 space-y-4">
                 <div>
-                  <p className="text-muted-foreground font-mono text-sm">Итого к оплате</p>
-                  <p className="text-foreground font-mono font-bold text-3xl">{totalPrice} ₽</p>
+                  <label className="text-muted-foreground font-mono text-sm block mb-2">Ник на сервере (необязательно)</label>
+                  <input
+                    type="text"
+                    value={nickname}
+                    onChange={e => setNickname(e.target.value)}
+                    placeholder="Введи свой ник..."
+                    className="w-full sm:w-72 bg-white/10 border border-white/20 rounded-xl px-4 py-2.5 text-foreground font-mono text-sm placeholder:text-muted-foreground focus:outline-none focus:border-primary/60"
+                  />
                 </div>
-                <button className="bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold font-mono text-lg hover:scale-105 transition-all duration-200 hover:shadow-[0_0_28px_hsl(var(--primary)/0.6)] flex items-center gap-2 w-full sm:w-auto justify-center">
-                  Оплатить <Icon name="ArrowUpRight" size={20} />
-                </button>
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <div>
+                    <p className="text-muted-foreground font-mono text-sm">Итого к оплате</p>
+                    <p className="text-foreground font-mono font-bold text-3xl">{totalPrice} ₽</p>
+                  </div>
+                  <button
+                    onClick={handlePay}
+                    className="bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold font-mono text-lg hover:scale-105 transition-all duration-200 hover:shadow-[0_0_28px_hsl(var(--primary)/0.6)] flex items-center gap-2 w-full sm:w-auto justify-center"
+                  >
+                    Оплатить через DonationAlerts <Icon name="ArrowUpRight" size={20} />
+                  </button>
+                </div>
               </div>
             </>
           )}
