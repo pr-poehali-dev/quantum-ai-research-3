@@ -32,26 +32,25 @@ export default function Footer() {
           </div>
 
           <div className="hidden md:flex flex-1 justify-end items-center relative">
-            <div className="relative">
+            <div className="relative overflow-hidden rounded-2xl" style={{ width: 400, height: 260 }}>
               <img
-                src={`${CDN_BASE}/jack-footer-ufo-new.png`}
-                alt="Макс в НЛО"
-                width={400}
-                height={300}
-                className="object-contain mb-0 mt-4"
+                src="https://cdn.poehali.dev/projects/4d77f338-ff1f-46fe-afbb-d7f43bb123d9/files/903c9c71-70a3-4372-aea1-01ab2be79a8e.jpg"
+                alt="Пейзаж SunCraft"
+                className="w-full h-full object-cover"
+                style={{ filter: "blur(2px) brightness(0.85)", transform: "scale(1.05)" }}
               />
+              <div className="absolute inset-0 rounded-2xl" style={{ background: "linear-gradient(to right, hsl(25 25% 10%) 0%, transparent 40%)" }} />
             </div>
           </div>
         </div>
 
         <div className="md:hidden flex justify-center mt-12">
-          <div className="relative">
+          <div className="relative overflow-hidden rounded-2xl w-full" style={{ height: 200 }}>
             <img
-              src={`${CDN_BASE}/jack-footer-ufo-new.png`}
-              alt="Макс в НЛО"
-              width={500}
-              height={375}
-              className="object-contain"
+              src="https://cdn.poehali.dev/projects/4d77f338-ff1f-46fe-afbb-d7f43bb123d9/files/903c9c71-70a3-4372-aea1-01ab2be79a8e.jpg"
+              alt="Пейзаж SunCraft"
+              className="w-full h-full object-cover"
+              style={{ filter: "blur(2px) brightness(0.85)", transform: "scale(1.05)" }}
             />
           </div>
         </div>
